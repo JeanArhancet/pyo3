@@ -65,10 +65,10 @@ else:
     if IS_32_BIT:
         # TS ±2147483648 (2**31)
         MIN_DATETIME = pdt.datetime(1901, 12, 13, 20, 45, 52)
-        MAX_DATETIME = pdt.datetime(2038, 1, 19, 3, 14, 8)
+        MAX_DATETIME = pdt.datetime(2038, 1, 19, 3, 14, 7)
     else:
         MIN_DATETIME = pdt.datetime(1, 1, 2, 0, 0)
-        MAX_DATETIME = pdt.datetime(9999, 12, 31, 18, 59, 59)
+        MAX_DATETIME = pdt.datetime(9999, 12, 31, 23, 59, 59)
 
 PYPY = platform.python_implementation() == "PyPy"
 
@@ -232,7 +232,7 @@ def test_datetime_from_timestamp(dt):
     if PYPY and dt < pdt.datetime(1900, 1, 1):
         pytest.xfail("pdt.datetime.timestamp will raise on PyPy with dates before 1900")
 
-    ts = pdt.datetime.timestamp(dt)
+    ts = pdt.datetime.timestamp(dt.replace(tzinfo=UTC))
     assert rdt.datetime_from_timestamp(ts) == pdt.datetime.fromtimestamp(ts)
 
 
